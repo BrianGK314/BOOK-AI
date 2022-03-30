@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Review App</title>
+</head>
+<body>
+    <div class="background_colour">
+        <div class="title">
+            <h1 class="page-title"><a class="page_title_link" href="/">Book Review App</a></h1>
+            <h3 class="page-minor">Powered by AI vision</h3>
+            <h6 class="page-minor">~Designed for Phones~</h6>
+        </div>
+        <div class="form-container">
+            <form class="form" action="/" method="POST" enctype="multipart/form-data">
+                <input class="form-input" type="file" name="imagefile">
+                <input class="pred-button" type="submit" value="Predict Book">
+            </form>
+        </div>
+        <!-- if person has not predicted anything, render this -->
+        {% if no_prediction %}
+        <h1 style="font-size:20px; text-align: center;">Highly Recommended Books</h1>
+        <div class="book-suggestions">
+            <div class="suggestion-card">
+                <div class="suggestion-image">
+                    <a href="https://www.goodreads.com/book/show/44767458-dune" target="blanc_"><img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555447414l/44767458.jpg"></a>
+                </div>
+                <div class="suggestion-name">Dune by Frank Herbert</div>
+            </div>
+            
+            <div class="suggestion-card">
+                <div class="suggestion-image">
+                    <a href="https://www.goodreads.com/en/book/show/37774" target="blanc_"><img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327265609l/37774.jpg"></a>
+                </div>
+                <div class="suggestion-name">Arrow of God by Chinua Achebe</div>
+            </div>
+
+            <div class="suggestion-card">
+                <div class="suggestion-image">
+                    <a href="https://www.goodreads.com/book/show/30835567-hit-refresh" target="blanc_"><img src="https://textbookcentre.com/media/products/2030301005968_RbX3yKi.jpg"></a>
+                </div>
+                <div class="suggestion-name">Hit Refresh by Satya Nadella</div>
+            </div>
+
+            <div class="suggestion-card">
+                <div class="suggestion-image">
+                    <a href="https://www.goodreads.com/book/show/38746485-becoming" target="blanc_"><img src="https://images-na.ssl-images-amazon.com/images/I/815rLjPo9KL.jpg"></a>
+                </div>
+                <div class="suggestion-name">Becoming by Michelle Obama </div>
+            </div>
+            
+        </div>
+        {% endif %}
+
+        <!-- <div clas="book-suggestions">
+            <div class="suggestion-card">
+                <div class="suggestion-image"></div>
+                <div class="suggestion-name"></div>
+            </div>
+        </div> -->
+      
+        <!-- when person has predicted, render this -->
+        {% if prediction %}
+        <div class="book-content-container">
+            <a href="/text"><p class="next-link"><em>Not what you were looking? Click here</em></p></a>
+            <div class="book-content">
+                <p class="book-name">Name: {{prediction}}</p>
+                {% if avgrat %}
+                <p class="book-rat">Rating: {{avgrat}}</p>
+                {% endif %}                
+                {% if summary %}
+                <p class="book-sum">Summary:</p>{{summary}}</p>
+                {% endif %}
+                
+            </div>
+        </div>
+        {% endif %}
+        {% if rev %}
+        <div class="book-reviews">
+            <h2>Reviews</h2>
+            {% for review in rev %}
+            <div class="book-card">
+                <div class="card-top">
+                    <p class="reviwer-rating"><b>This reviewer has given it: {{review[0]}}/5</b></p>
+                </div>
+                <div class="card-bottom">
+                    <p class="reviewer-bold">Comment</p>
+                    <p class="reviewer-comment">{{review[1]}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    
+}
+
+/* back-colour */
+body{
+    /* background: linear-gradient(
+        to bottom,
+        #EFECE7 0%,
+        #EFECE7 50%,
+        #E5DED6 50%,
+        #E5DED6 100%
+    ); */
+    background-color: #E5DED6;
+    font-family: 'Playfair Display', serif;
+}
+
+.background_colour{
+    height: 100%;
+    
+
+}
+
+.back-link{
+    padding-top: 1rem;
+}
+
+a{
+    color: black;
+}
+
+/* Title/Headers */
+
+.title{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+/* form */
+
+.form-container{
+    padding-bottom: 2rem;   
+    padding-left:1rem ;
+    display: flex;
+    justify-content: left;
+    
+}
+
+.book-content-container,.book-reviews{
+    margin: 2rem 0;   
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+
+.form-input{
+    margin-left:20px ;
+    font-size: 12px;
+    background-color: #563812;
+    color: white;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+
+.pred-button{
+    font-size: small;
+    background-color: #E1CCBB;
+    border: none;
+    border-radius: 10px;
+    padding: 1.1rem;
+
+}
+
+::-webkit-file-upload-button{
+    display: none;
+}
+
+/* Book summary */
+
+.book-content-container{
+    background-color: rgba(255, 228, 196, 0.149);
+    margin: auto;
+    width: 90%;
+    border-radius: 1.2rem;
+    padding: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 1px 7px 29px 0px;
+}
+
+.book-name, .book-rat,.book-sum{
+    text-align: center;
+}
+
+.book-name{
+    font-size: 27px;
+}
+.book-rat{
+    font-size: 23px;
+    margin: 20px 0;
+}
+
+.book-sum{
+    font-size: 20px;
+}
+
+/* Reviews! */
+.reviwer-rating,.reviewer-bold,.reviewer-comment{
+    padding-left: 1.3rem;
+}
+
+
+.book-card{
+    margin-top: 1.5rem;
+    width: 92%;
+    min-height: 300px;
+    border-radius: .5rem;
+    background-color: #F8F8F9;
+}
+
+.card-top{
+    padding: 1.5rem 0;
+    border-bottom: 3px solid white;
+}
+
+.reviwer-rating{
+    font-size: 22px;
+}
+
+.card-bottom{
+    padding-top:1rem;
+    padding-bottom: 20px;
+}
+
+.reviewer-bold{
+    font-size: 20px;
+    color: rgb(69, 69, 69);
+
+}
+
+.reviewer-comment{
+    padding-right: 17px;
+}

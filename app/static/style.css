@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;   
+    
+}
+
+/* back-colour */
+body{
+    /* background: linear-gradient(
+        to bottom,
+        #EFECE7 0%,
+        #EFECE7 50%,
+        #E5DED6 50%,
+        #E5DED6 100%
+    ); */
+    background-color: #E5DED6;
+    font-family: 'Playfair Display', serif;
+}
+
+.background_colour{
+    height: 100%;
+    
+
+}
+
+.page_title_link{
+    text-decoration: none;
+    color: black;
+}
+
+/* Title/Headers */
+
+.title{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+/* form */
+
+.form-container{
+    padding-bottom: 2rem;   
+    padding-left:1rem ;
+}
+
+.form-input{
+    margin-left:20px ;
+}
+
+
+/* Before prediction */
+
+.book-suggestions{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.suggestion-card{
+    margin: 2rem 1.2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+img{
+    width: 100%;
+    height: 100%; 
+    border-radius: 10px;
+    object-fit: cover;
+
+}
+
+.suggestion-image{
+    height: 195px;
+    width: 160px;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+.suggestion-name{
+    padding-top: 1rem;
+    width: 155px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+
+/* Before prediction */
+
+.book-content-container,.book-reviews{
+    margin: 2rem 0;   
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.form-input{
+    background-color: #563812;
+    color: white;
+    border-radius: 10px;
+    padding: 1rem;
+
+}
+
+.pred-button{
+    background-color: #E1CCBB;
+    border: none;
+    border-radius: 10px;
+    padding: 1rem;
+    position: absolute;
+    right: 2.1rem;
+}
+
+::-webkit-file-upload-button{
+    display: none;
+}
+
+/* Book summary */
+
+.book-content-container{
+    background-color: rgba(255, 228, 196, 0.149);
+    margin: auto;
+    width: 90%;
+    border-radius: 1.2rem;
+    padding: 1rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 1px 7px 29px 0px;
+}
+
+.book-name, .book-rat,.book-sum{
+    text-align: center;
+}
+
+.book-name{
+    font-size: 27px;
+}
+.book-rat{
+    font-size: 23px;
+    margin: 20px 0;
+}
+
+.book-sum{
+    font-size: 20px;
+}
+
+/* Reviews! */
+.reviwer-rating,.reviewer-bold,.reviewer-comment{
+    padding-left: 1.3rem;
+}
+
+
+.book-card{
+    margin-top: 1.5rem;
+    width: 92%;
+    min-height: 300px;
+    border-radius: .5rem;
+    background-color: #F8F8F9;
+}
+
+.card-top{
+    padding: 1.5rem 0;
+    border-bottom: 3px solid white;
+}
+
+.reviwer-rating{
+    font-size: 22px;
+}
+
+.card-bottom{
+    padding-top:1rem;
+    padding-bottom: 20px;
+}
+
+.reviewer-bold{
+    font-size: 20px;
+    color: rgb(69, 69, 69);
+
+}
+
+.reviewer-comment{
+    padding-right: 17px;
+}

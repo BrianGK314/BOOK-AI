@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Review App</title>
+</head>
+<body>
+    <div class="background_colour">
+        <div class="title">
+            <h1 class="page-title">Book Review App</h1>
+            <h3 class="page-minor">Powered by AI vision</h3>
+            <a href="/"><p class="back-link"><em>Back To Home Page</em></p></a>
+        </div>
+        <div class="form-container">
+            <form class="form" action="/text" method="POST">
+                <input class="form-input" type="text" value="NAME & AUTHOR" name="textfil">
+                <input class="pred-button" type="submit" value="Search text">
+            </form>
+
+
+        </div>
+        <!-- if person has not predicted anything, render this -->
+        <!-- <div clas="book-suggestions">
+            <div class="suggestion-card">
+                <div class="suggestion-image"></div>
+                <div class="suggestion-name"></div>
+            </div>
+        </div> -->
+      
+        <!-- when person has predicted, render this -->
+        {% if prediction %}
+        <div class="book-content-container">
+            <div class="book-content">
+                <p class="book-name">Name: {{prediction}}</p>
+                {% if avgrat %}
+                <p class="book-rat">Rating: {{avgrat}}</p>
+                {% endif %}
+                
+                {% if summary %}
+                <p class="book-sum">Summary:</p>{{summary}}</p>
+                {% endif %}
+                
+            </div>
+        </div>
+        {% endif %}
+        {% if rev %}
+        <div class="book-reviews">
+            <h2>Reviews</h2>
+            {% for review in rev %}
+            <div class="book-card">
+                <div class="card-top">
+                    <p class="reviwer-rating"><b>This reviewer has given it: {{review[0]}}/5</b></p>
+                </div>
+                <div class="card-bottom">
+                    <p class="reviewer-bold">Comment</p>
+                    <p class="reviewer-comment">{{review[1]}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
