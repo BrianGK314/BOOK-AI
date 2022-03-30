@@ -47,14 +47,13 @@ def predict():
 
     #Predict Image
 
-    # N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
-
-    # headers= {"X-Api-Key": N_Key}
-    # text = img_to_text_ninja(image_path, headers)
+    N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
+    headers= {"X-Api-Key": N_Key}
+    text = img_to_text_ninja(image_path, headers)
 
     # credential =json.load(open('credentials.json'))
-    api='57b40208aa58430d9877390c2130b351'
-    text= img_to_text_azure(api,image_path)
+    # api='57b40208aa58430d9877390c2130b351'
+    # text= img_to_text_azure(api,image_path)
 
     resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
 
