@@ -280,19 +280,18 @@ def img_to_text_ninja(image_path,headers):
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep()
+    time.sleep(3)
     r=r.json()
     text = get_name(r)
     return text
 
 def img_to_text_azure(api, image_path):
     cv_client=ComputerVisionClient("https://bookcomp.cognitiveservices.azure.com/",CognitiveServicesCredentials(api))
-    time.sleep(5)
     response=cv_client.read_in_stream(open(image_path,'rb'),language='en',raw='True')
-    time.sleep(5)
+    time.sleep(3)
     oplocation=response.headers['Operation-Location']
     opid=oplocation.split('/')[-1]
-    time.sleep(5)
+    time.sleep(3)
     result=cv_client.get_read_result(opid)
 
     #print(result)
