@@ -49,12 +49,22 @@ def predict():
 
     if request.method == 'POST':
 
-        imagefile= request.files['imagefile']
-        image_path = "app/images" + imagefile.filename
-        imagefile.save(image_path)
+        try:
+            imagefile= request.files['imagefile']
+        except:
+            return "cannot find image!"
+        
+        try:
+            image_path = "app/images" + imagefile.filename
+            imagefile.save(image_path)
+        except:
+            return "cannot save image!"
 
-        api='57b40208aa58430d9877390c2130b351'
-        text= img_to_text_azure(api,image_path)  
+        try:
+            api='57b40208aa58430d9877390c2130b351'
+            text= img_to_text_azure(api,image_path)  
+        except:
+            return "Image to text api not working"
 
 
         #Predict Image  
@@ -66,14 +76,27 @@ def predict():
 
         #retrieve image
 
-        resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
+        try:
+            resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
+        except:
+            return "google search (build) not working"
 
 
 
         #Contains the search term
-        result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
 
-        name,cover,sum,avg_rating,page_link= web_items(result,resource,text)
+        try:
+            result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
+
+        except:
+            return "google resource not working"
+
+        try:
+            name,cover,sum,avg_rating,page_link= web_items(result,resource,text)
+
+        except:
+            return "web items not working"
+
 
         #returns a list of ratings(number) and review.
         a=data(page_link)
