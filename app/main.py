@@ -55,24 +55,20 @@ def predict():
         try:
             image_path = "app/images" + imagefile.filename
             imagefile.save(image_path)
-            time.sleep(5)
+            time.sleep(3)
         except:
             return "cannot save image!"
 
         try:
-            api='57b40208aa58430d9877390c2130b351'
-            text= img_to_text_azure(api,image_path)
+            # api='57b40208aa58430d9877390c2130b351'
+            # text= img_to_text_azure(api,image_path)
+
+            N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
+            headers= {"X-Api-Key": N_Key}
+            text = img_to_text_ninja(image_path, headers)
             time.sleep(10)  
         except:
             return "Image to text api not working"
-
-
-        #Predict Image  
-
-
-        # N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
-        # headers= {"X-Api-Key": N_Key}
-        # text = img_to_text_ninja(image_path, headers)
 
         #retrieve image
 
@@ -277,9 +273,12 @@ def data(link):
 def img_to_text_ninja(image_path,headers):
     api_url = 'https://api.api-ninjas.com/v1/imagetotext'
     image_file_descriptor = open(image_path, 'rb')
+    time.sleep(3)
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
+    time.sleep(3)
     r=r.json()
+    time.sleep(3)
     text = get_name(r)
     return text
 
