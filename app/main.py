@@ -8,6 +8,7 @@ import json
 import os
 #from PIL import Image 
 import logging
+import asyncio
 
 
 UPLOAD_FOLDER = "app/images"
@@ -64,7 +65,8 @@ def predict():
 
             N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
             headers= {"X-Api-Key": N_Key}
-            text = img_to_text_ninja(image_path, headers)
+            text = asyncio.run(img_to_text_ninja(image_path, headers))
+            #text =  img_to_text_ninja(image_path, headers)
         except:
             return "Image to text api not working"
 
@@ -275,12 +277,11 @@ def data(link):
   return ult_list
 
 
-def img_to_text_ninja(image_path,headers):
+async def img_to_text_ninja(image_path,headers):
     api_url = 'https://api.api-ninjas.com/v1/imagetotext'
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep(5)
     r=r.json()
     text = get_name(r)
     return text
