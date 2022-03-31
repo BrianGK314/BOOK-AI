@@ -66,7 +66,6 @@ def predict():
             N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
             headers= {"X-Api-Key": N_Key}
             text = img_to_text_ninja(image_path, headers)
-            time.sleep(10)  
         except:
             return "Image to text api not working"
 
@@ -74,7 +73,6 @@ def predict():
 
         try:
             resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
-            time.sleep(4)
         except:
             return "google search (build) not working"
 
@@ -91,8 +89,6 @@ def predict():
 
         try:
             name,cover,sum,avg_rating,page_link= web_items(result,resource,text)
-            time.sleep(4)
-
         except:
             return "web items not working"
 
@@ -273,12 +269,10 @@ def data(link):
 def img_to_text_ninja(image_path,headers):
     api_url = 'https://api.api-ninjas.com/v1/imagetotext'
     image_file_descriptor = open(image_path, 'rb')
-    time.sleep(3)
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep(3)
+    time.sleep(4)
     r=r.json()
-    time.sleep(3)
     text = get_name(r)
     return text
 
