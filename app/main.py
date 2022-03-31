@@ -85,10 +85,9 @@ def predict():
             return "cannot save image!"
 
         try:
+            api='57b40208aa58430d9877390c2130b351'
+            text= img_to_text_azure(api,image_path)
 
-            N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
-            headers= {"X-Api-Key": N_Key}
-            text = img_to_text_ninja(image_path, headers)
         except:
             return "Image to text api not working"
 
@@ -286,13 +285,23 @@ def data(link):
   return ult_list
 
 
-def img_to_text_ninja(image_path,headers):
-    api_url = 'https://api.api-ninjas.com/v1/imagetotext'
-    image_file_descriptor = open(image_path, 'rb')
-    files = {'image': image_file_descriptor}
-    r = requests.post(api_url,headers=headers, files=files)
-    r=r.json()
-    text = get_name(r)
-    return text
+def img_to_text_azure(api, image_path):
+    cv_client=ComputerVisionClient("https://bookcomp.cognitiveservices.azure.com/",CognitiveServicesCredentials(api))
+    response=cv_client.read_in_stream(open(image_path,'rb'),language='en',raw='True')
+    oplocation=response.headers['Operation-Location']
+    opid=oplocation.split('/')[-1]
+    time.sleep(3.3)
+    result=cv_client.get_read_result(opid)
 
+    text=[]
+    if (result.status) == OperationStatusCodes.succeeded:
+        read_results=result.analyze_result.read_results
+        for analysed_result in read_results:
+            for line in analysed_result.lines:
+                text.append(line.text)
+                
+
+    final_text = listToString(text)
+
+    return final_text
 
