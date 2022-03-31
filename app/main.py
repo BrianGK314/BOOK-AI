@@ -79,19 +79,16 @@ def predict():
             return "cannot find image!"
         
         try:
-            image_path = "app/images" + imagefile.filename
+            image_path = "app/images/" + imagefile.filename
             imagefile.save(image_path)
         except:
             return "cannot save image!"
 
         try:
-            # api='57b40208aa58430d9877390c2130b351'
-            # text= img_to_text_azure(api,image_path)
 
             N_Key='hSplTYExlQlsw7/CanxVyg==UaVGwMyC16SefTzf'
             headers= {"X-Api-Key": N_Key}
-            text = asyncio.run(img_to_text_ninja(image_path, headers))
-            #text =  img_to_text_ninja(image_path, headers)
+            text = img_to_text_ninja(image_path, headers)
         except:
             return "Image to text api not working"
 
@@ -178,63 +175,50 @@ def web_items_user_text(result):
   return name,sum,avg_rating,page_link
 
 
-
 def web_items(result,resource,text):
-    name="bangladesh"
-    sum='this book is great'
-    avg_rating=10
-    page_link="https://google.com"
+    if int(result['searchInformation']['totalResults']) ==0:
+        result = resource.list(q=text[:int(len(text)*0.75)], cx="318f2d8e0346626fb").execute()
+        print('retry1')
+        if int(result['searchInformation']['totalResults']) ==0:
+            result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+            print('retry2')
+            if int(result['searchInformation']['totalResults']) ==0:
+                result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+                print('retry3')
+
+    #name of book
+    name =result['items'][0]['htmlTitle']
+    if '<b>' in name:
+        name = name.replace('<b>','')
+        name = name.replace('</b>','')
+
+    if '&#39;' in name:
+        name = name.replace('&#39;',"'")
+
+    cover=str(name)
+    sum = result['items'][0]['snippet']
+
+    try:
+        try: 
+            avg_rating=result['items'][0]['pagemap']['aggregaterating'][0]['ratingvalue']
+        except KeyError:
+            #Gets the rating of the next movie independent of whether they are closely related or not
+            avg_rating=result['items'][1]['pagemap']['aggregaterating'][0]['ratingvalue']
+    except:
+        link=result['items'][0]['link']
+        source = requests.get(link)
+        soup = BeautifulSoup(source.content, 'html.parser')
+
+        a1=soup.find('div',class_='uitext stacked')
+        avg_rating= a1.find_all('span')[-4].text.strip()
+
+    avg_rating
+
+
+    #PART 2
+    page_link=result['items'][0]['link']
 
     return name,sum,avg_rating,page_link
-
-
-
-
-
-# def web_items(result,resource,text):
-#     if int(result['searchInformation']['totalResults']) ==0:
-#         result = resource.list(q=text[:int(len(text)*0.75)], cx="318f2d8e0346626fb").execute()
-#         print('retry1')
-#         if int(result['searchInformation']['totalResults']) ==0:
-#             result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
-#             print('retry2')
-#             if int(result['searchInformation']['totalResults']) ==0:
-#                 result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
-#                 print('retry3')
-
-#     #name of book
-#     name =result['items'][0]['htmlTitle']
-#     if '<b>' in name:
-#         name = name.replace('<b>','')
-#         name = name.replace('</b>','')
-
-#     if '&#39;' in name:
-#         name = name.replace('&#39;',"'")
-
-#     cover=str(name)
-#     sum = result['items'][0]['snippet']
-
-#     try:
-#         try: 
-#             avg_rating=result['items'][0]['pagemap']['aggregaterating'][0]['ratingvalue']
-#         except KeyError:
-#             #Gets the rating of the next movie independent of whether they are closely related or not
-#             avg_rating=result['items'][1]['pagemap']['aggregaterating'][0]['ratingvalue']
-#     except:
-#         link=result['items'][0]['link']
-#         source = requests.get(link)
-#         soup = BeautifulSoup(source.content, 'html.parser')
-
-#         a1=soup.find('div',class_='uitext stacked')
-#         avg_rating= a1.find_all('span')[-4].text.strip()
-
-#     avg_rating
-
-
-#     #PART 2
-#     page_link=result['items'][0]['link']
-
-#     return name,sum,avg_rating,page_link
 
 
 def df():
@@ -302,7 +286,7 @@ def data(link):
   return ult_list
 
 
-async def img_to_text_ninja(image_path,headers):
+def img_to_text_ninja(image_path,headers):
     api_url = 'https://api.api-ninjas.com/v1/imagetotext'
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
@@ -310,37 +294,5 @@ async def img_to_text_ninja(image_path,headers):
     r=r.json()
     text = get_name(r)
     return text
-
-def img_to_text_azure(api, image_path):
-    cv_client=ComputerVisionClient("https://bookcomp.cognitiveservices.azure.com/",CognitiveServicesCredentials(api))
-    response=cv_client.read_in_stream(open(image_path,'rb'),language='en',raw='True')
-    time.sleep(3)
-    oplocation=response.headers['Operation-Location']
-    opid=oplocation.split('/')[-1]
-    time.sleep(3)
-    result=cv_client.get_read_result(opid)
-
-    #print(result)
-
-    text=[]
-    if (result.status) == OperationStatusCodes.succeeded:
-        read_results=result.analyze_result.read_results
-        for analysed_result in read_results:
-            for line in analysed_result.lines:
-                text.append(line.text)
-                
-    # text=str(text).replace(',',' ')
-    # print(text.strip().replace("'",""))
-
-    final_text = listToString(text)
-
-    return final_text
-
-
-# def beers(num):
-#     x=list([i for i in range(num)].sort(reverse=True))
-#     for i in x:
-#         print(f"{i} numbers of beers on the wall, drink one down, {i-1} number of beers on the wall")
-
 
 
