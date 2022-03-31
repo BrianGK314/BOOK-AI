@@ -55,7 +55,6 @@ def predict():
         try:
             image_path = "app/images" + imagefile.filename
             imagefile.save(image_path)
-            time.sleep(3)
         except:
             return "cannot save image!"
 
@@ -82,8 +81,6 @@ def predict():
 
         try:
             result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
-            time.sleep(2)
-
         except:
             return "google resource not working"
 
@@ -236,9 +233,6 @@ def get_name(resp):
 def data(link):
   source = requests.get(link)
   soup = BeautifulSoup(source.content, 'html.parser')
-
-  time.sleep(4)
-
   #All the reviews
   all_reviews=soup.findAll('div',class_='friendReviews elementListBrown')[:9]
 
@@ -271,7 +265,7 @@ def img_to_text_ninja(image_path,headers):
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep(4)
+    time.sleep(5)
     r=r.json()
     text = get_name(r)
     return text
