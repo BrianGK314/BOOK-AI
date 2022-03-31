@@ -85,7 +85,7 @@ def predict():
             return "google resource not working"
 
         try:
-            name,cover,sum,avg_rating,page_link= web_items(result,resource,text)
+            name,sum,avg_rating,page_link= web_items(result,resource,text)
         except:
             return "web items not working"
 
@@ -97,7 +97,7 @@ def predict():
         df()
         
 
-        return render_template('index.html', prediction=name,summary=sum,rev=a,avgrat=avg_rating,bknm=cover)
+        return render_template('index.html', prediction=name,summary=sum,rev=a,avgrat=avg_rating)
     else:
         no_prediction =True
         return render_template('index.html', no_prediction=no_prediction)
@@ -150,49 +150,61 @@ def web_items_user_text(result):
 
 
 def web_items(result,resource,text):
-    if int(result['searchInformation']['totalResults']) ==0:
-        result = resource.list(q=text[:int(len(text)*0.75)], cx="318f2d8e0346626fb").execute()
-        print('retry1')
-        if int(result['searchInformation']['totalResults']) ==0:
-            result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
-            print('retry2')
-            if int(result['searchInformation']['totalResults']) ==0:
-                result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
-                print('retry3')
+    name="bangladesh"
+    sum='this book is great'
+    avg_rating=10
+    page_link="https://google.com"
 
-    #name of book
-    name =result['items'][0]['htmlTitle']
-    if '<b>' in name:
-        name = name.replace('<b>','')
-        name = name.replace('</b>','')
-
-    if '&#39;' in name:
-        name = name.replace('&#39;',"'")
-
-    cover=str(name)
-    sum = result['items'][0]['snippet']
-
-    try:
-        try: 
-            avg_rating=result['items'][0]['pagemap']['aggregaterating'][0]['ratingvalue']
-        except KeyError:
-            #Gets the rating of the next movie independent of whether they are closely related or not
-            avg_rating=result['items'][1]['pagemap']['aggregaterating'][0]['ratingvalue']
-    except:
-        link=result['items'][0]['link']
-        source = requests.get(link)
-        soup = BeautifulSoup(source.content, 'html.parser')
-
-        a1=soup.find('div',class_='uitext stacked')
-        avg_rating= a1.find_all('span')[-4].text.strip()
-
-    avg_rating
+    return name,sum,avg_rating,page_link
 
 
-    #PART 2
-    page_link=result['items'][0]['link']
 
-    return name,cover,sum,avg_rating,page_link
+
+
+# def web_items(result,resource,text):
+#     if int(result['searchInformation']['totalResults']) ==0:
+#         result = resource.list(q=text[:int(len(text)*0.75)], cx="318f2d8e0346626fb").execute()
+#         print('retry1')
+#         if int(result['searchInformation']['totalResults']) ==0:
+#             result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+#             print('retry2')
+#             if int(result['searchInformation']['totalResults']) ==0:
+#                 result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+#                 print('retry3')
+
+#     #name of book
+#     name =result['items'][0]['htmlTitle']
+#     if '<b>' in name:
+#         name = name.replace('<b>','')
+#         name = name.replace('</b>','')
+
+#     if '&#39;' in name:
+#         name = name.replace('&#39;',"'")
+
+#     cover=str(name)
+#     sum = result['items'][0]['snippet']
+
+#     try:
+#         try: 
+#             avg_rating=result['items'][0]['pagemap']['aggregaterating'][0]['ratingvalue']
+#         except KeyError:
+#             #Gets the rating of the next movie independent of whether they are closely related or not
+#             avg_rating=result['items'][1]['pagemap']['aggregaterating'][0]['ratingvalue']
+#     except:
+#         link=result['items'][0]['link']
+#         source = requests.get(link)
+#         soup = BeautifulSoup(source.content, 'html.parser')
+
+#         a1=soup.find('div',class_='uitext stacked')
+#         avg_rating= a1.find_all('span')[-4].text.strip()
+
+#     avg_rating
+
+
+#     #PART 2
+#     page_link=result['items'][0]['link']
+
+#     return name,sum,avg_rating,page_link
 
 
 def df():
