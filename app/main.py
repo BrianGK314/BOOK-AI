@@ -7,11 +7,13 @@ import time
 import json
 import os
 #from PIL import Image 
+import logging
 
 
 UPLOAD_FOLDER = "app/images"
 app = Flask(__name__)
 
+app.logger.setLevel(logging.ERROR)
 #app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -38,13 +40,9 @@ def text_predict():
 
     return render_template('concepttype.html', prediction=name,summary=sum,rev=a,avgrat=avg_rating)
 
-@app.route('/',methods=['GET'])
-def home():
-    no_prediction =True
-    return render_template('index.html', no_prediction=no_prediction)
 
 
-@app.route('/',methods=['POST'])
+@app.route('/',methods=['POST','GET'])
 def predict():
 
     if request.method == 'POST':
@@ -57,12 +55,14 @@ def predict():
         try:
             image_path = "app/images" + imagefile.filename
             imagefile.save(image_path)
+            time.sleep(5)
         except:
             return "cannot save image!"
 
         try:
             api='57b40208aa58430d9877390c2130b351'
-            text= img_to_text_azure(api,image_path)  
+            text= img_to_text_azure(api,image_path)
+            time.sleep(10)  
         except:
             return "Image to text api not working"
 
@@ -78,6 +78,7 @@ def predict():
 
         try:
             resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
+            time.sleep(4)
         except:
             return "google search (build) not working"
 
@@ -87,12 +88,14 @@ def predict():
 
         try:
             result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
+            time.sleep(2)
 
         except:
             return "google resource not working"
 
         try:
             name,cover,sum,avg_rating,page_link= web_items(result,resource,text)
+            time.sleep(4)
 
         except:
             return "web items not working"
@@ -101,11 +104,14 @@ def predict():
         #returns a list of ratings(number) and review.
         a=data(page_link)
 
-        time.sleep(3)
+        time.sleep(4)
         df()
         
 
         return render_template('index.html', prediction=name,summary=sum,rev=a,avgrat=avg_rating,bknm=cover)
+    else:
+        no_prediction =True
+        return render_template('index.html', no_prediction=no_prediction)
 
 import os,shutil
 import requests
@@ -239,7 +245,7 @@ def data(link):
   source = requests.get(link)
   soup = BeautifulSoup(source.content, 'html.parser')
 
-
+  time.sleep(4)
 
   #All the reviews
   all_reviews=soup.findAll('div',class_='friendReviews elementListBrown')[:9]
@@ -279,7 +285,9 @@ def img_to_text_ninja(image_path,headers):
 
 def img_to_text_azure(api, image_path):
     cv_client=ComputerVisionClient("https://bookcomp.cognitiveservices.azure.com/",CognitiveServicesCredentials(api))
+    time.sleep(5)
     response=cv_client.read_in_stream(open(image_path,'rb'),language='en',raw='True')
+    time.sleep(5)
     oplocation=response.headers['Operation-Location']
     opid=oplocation.split('/')[-1]
     time.sleep(5)
