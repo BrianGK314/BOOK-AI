@@ -72,6 +72,7 @@ def predict():
 
         try:
             resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
+            time.sleep(2)
         except:
             return "google search (build) not working"
 
@@ -81,6 +82,8 @@ def predict():
 
         try:
             result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
+            time.sleep(2)
+
         except:
             return "google resource not working"
 
@@ -277,7 +280,7 @@ def img_to_text_ninja(image_path,headers):
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep(5)
+    time.sleep()
     r=r.json()
     text = get_name(r)
     return text
