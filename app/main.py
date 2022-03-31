@@ -280,7 +280,7 @@ def img_to_text_ninja(image_path,headers):
     image_file_descriptor = open(image_path, 'rb')
     files = {'image': image_file_descriptor}
     r = requests.post(api_url,headers=headers, files=files)
-    time.sleep(3)
+    time.sleep(8)
     r=r.json()
     text = get_name(r)
     return text
