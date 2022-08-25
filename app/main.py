@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, Response
-#from app.utility import df, data, web_items, web_items_user_text,img_to_text_azure, img_to_text_ninja
 from apiclient.discovery import build
 from bs4 import BeautifulSoup
 import requests
 import time
 import json
 import os
-#from PIL import Image 
 import logging
 import asyncio
 
@@ -51,12 +49,12 @@ def text():
 def text_predict():
     name_by_user = request.form['textfil']
 
-    G_Key='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA'
+    G_Key=os.GKEY
 
     resource = build("customsearch","v1",developerKey=G_Key).cse()
 
     #Contains the search term
-    result = resource.list(q=name_by_user, cx="318f2d8e0346626fb").execute()
+    result = resource.list(q=name_by_user, cx=os.KEYST).execute()
 
     #name of book
     name,sum,avg_rating,page_link=web_items_user_text(result)
@@ -85,7 +83,7 @@ def predict():
             return "cannot save image!"
 
         try:
-            api='57b40208aa58430d9877390c2130b351'
+            api=os.API
             text= img_to_text_azure(api,image_path)
 
         except:
@@ -94,7 +92,7 @@ def predict():
         #retrieve image
 
         try:
-            resource = build("customsearch","v1",developerKey='AIzaSyDQn27q-RrhCqsGgqzGFSdi1FeIKrqv_GA').cse()
+            resource = build("customsearch","v1",developerKey=os.PASS).cse()
             time.sleep(2)
         except:
             return "google search (build) not working"
@@ -104,7 +102,7 @@ def predict():
         #Contains the search term
 
         try:
-            result = resource.list(q=text[:153], cx="318f2d8e0346626fb").execute()
+            result = resource.list(q=text[:153], cx=os.CX).execute()
             time.sleep(2)
 
         except:
@@ -175,14 +173,15 @@ def web_items_user_text(result):
 
 
 def web_items(result,resource,text):
+    cx_t=os.CX
     if int(result['searchInformation']['totalResults']) ==0:
-        result = resource.list(q=text[:int(len(text)*0.75)], cx="318f2d8e0346626fb").execute()
+        result = resource.list(q=text[:int(len(text)*0.75)], cx=os.CX).execute()
         print('retry1')
         if int(result['searchInformation']['totalResults']) ==0:
-            result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+            result = resource.list(q=text[int(len(text)*0.25):], cx=cx_t).execute()
             print('retry2')
             if int(result['searchInformation']['totalResults']) ==0:
-                result = resource.list(q=text[int(len(text)*0.25):], cx="318f2d8e0346626fb").execute()
+                result = resource.list(q=text[int(len(text)*0.25):], cx=cx_t).execute()
                 print('retry3')
 
     #name of book
